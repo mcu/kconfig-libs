@@ -1,2 +1,2 @@
 # kconfig-libs
-Create libraries for components like the early ESP-IDF but with a single makefile
+Build components into libraries like the early ESP-IDF but with a single makefile
