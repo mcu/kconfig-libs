@@ -1,0 +1,5 @@
+build
+.settings
+.cproject
+.project
+.config.old

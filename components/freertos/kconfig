@@ -1,0 +1,159 @@
+###############################################################################
+# SPDX-License-Identifier: GPL-3.0-or-later
+###############################################################################
+
+menu "FreeRTOS"
+
+  ###########################################################################
+
+  config FREERTOS_TICK_RATE_HZ
+    int "Tick rate (Hz)"
+    default 1000
+    range 1 1000
+
+  ###########################################################################
+
+  config FREERTOS_TOTAL_HEAP_SIZE
+    int "Total heap size"
+    default 3072
+    range 0 1048576
+
+  ###########################################################################
+
+  config FREERTOS_MINIMAL_STACK_SIZE
+    int "Minimal stack size"
+    default 128
+    range 32 1048576
+
+  ###########################################################################
+
+  config FREERTOS_MAX_TASK_NAME_LEN
+    int "Maximal task name len"
+    default 16
+    range 8 32
+
+  ###########################################################################
+
+  config FREERTOS_MAX_TASK_PRIORITIES
+    int "Maximal num of tasks priorities"
+    default 7
+    range 0 15
+
+  ###########################################################################
+
+  config FREERTOS_MAX_CO_ROUTINE_PRIORITIES
+    int "Maximal coroutine priorities"
+    default  2
+    range 0 15
+
+  ###########################################################################
+
+  config FREERTOS_QUEUE_REGISTRY_SIZE
+    int "Queue registry size"
+    default 8
+    range 0 32
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_SUPPORT_STATIC_ALLOCATION
+    bool "SUPPORT_STATIC_ALLOCATION"
+    default y
+
+  config FREERTOS_SUPPORT_STATIC_ALLOCATION
+    int
+      default 0 if !FREERTOS_FLAG_SUPPORT_STATIC_ALLOCATION
+      default 1 if FREERTOS_FLAG_SUPPORT_STATIC_ALLOCATION && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_SUPPORT_DYNAMIC_ALLOCATION
+    bool "SUPPORT_DYNAMIC_ALLOCATION"
+    default y
+
+  config FREERTOS_SUPPORT_DYNAMIC_ALLOCATION
+    int
+      default 0 if !FREERTOS_FLAG_SUPPORT_DYNAMIC_ALLOCATION
+      default 1 if FREERTOS_FLAG_SUPPORT_DYNAMIC_ALLOCATION && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_PREEMPTION
+    bool "USE_PREEMPTION"
+    default y
+
+  config FREERTOS_USE_PREEMPTION
+    int
+      default 0 if !FREERTOS_FLAG_USE_PREEMPTION
+      default 1 if FREERTOS_FLAG_USE_PREEMPTION && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_IDLE_HOOK
+    bool "USE_IDLE_HOOK"
+    default n
+
+  config FREERTOS_USE_IDLE_HOOK
+    int
+      default 0 if !FREERTOS_FLAG_USE_IDLE_HOOK
+      default 1 if FREERTOS_FLAG_USE_IDLE_HOOK && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_TICK_HOOK
+    bool "USE_TICK_HOOK"
+    default n
+
+  config FREERTOS_USE_TICK_HOOK
+    int
+      default 0 if !FREERTOS_FLAG_USE_TICK_HOOK
+      default 1 if FREERTOS_FLAG_USE_TICK_HOOK && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_16_BIT_TICKS
+    bool "USE_16_BIT_TICKS"
+    default n
+
+  config FREERTOS_USE_16_BIT_TICKS
+    int
+      default 0 if !FREERTOS_FLAG_USE_16_BIT_TICKS
+      default 1 if FREERTOS_FLAG_USE_16_BIT_TICKS && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_MUTEXES
+    bool "USE_MUTEXES"
+    default y
+
+  config FREERTOS_USE_MUTEXES
+    int
+      default 0 if !FREERTOS_FLAG_USE_MUTEXES
+      default 1 if FREERTOS_FLAG_USE_MUTEXES && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_PORT_OPTIMISED_TASK_SELECTION
+    bool "USE_PORT_OPTIMISED_TASK_SELECTION"
+    default y
+
+  config FREERTOS_USE_PORT_OPTIMISED_TASK_SELECTION
+    int
+      default 0 if !FREERTOS_FLAG_USE_PORT_OPTIMISED_TASK_SELECTION
+      default 1 if FREERTOS_FLAG_USE_PORT_OPTIMISED_TASK_SELECTION && y
+
+  ###########################################################################
+
+  config FREERTOS_FLAG_USE_CO_ROUTINES
+    bool "USE_CO_ROUTINES"
+    default n
+
+  config FREERTOS_USE_CO_ROUTINES
+    int
+      default 0 if !FREERTOS_FLAG_USE_CO_ROUTINES
+      default 1 if FREERTOS_FLAG_USE_CO_ROUTINES && y
+
+  ###########################################################################
+
+endmenu
+
+###############################################################################

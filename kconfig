@@ -1,0 +1,297 @@
+###############################################################################
+# SPDX-License-Identifier: GPL-3.0-or-later
+###############################################################################
+
+mainmenu "MCU App Configuration"
+
+  menu "Application"
+    source "application/kconfig"
+  endmenu
+
+  menu "Compiler"
+    ###########################################################################
+    # COMPILER DEBUG LEVEL
+    ###########################################################################
+    choice COMPILER_DEBUG_LEVEL
+      prompt "Debug Level"
+      default COMPILER_DEBUG_LEVEL_3
+      help
+        -g  Debug information depend on OS (stabs, COFF, XCOFF or DWARF)
+        -g0 No debug information
+        -g1 Minimal debug information
+        -g3 Maximum debug information
+
+      config COMPILER_DEBUG_LEVEL_DEPEND_ON_OS
+        bool "-g Dep on OS"
+
+      config COMPILER_DEBUG_LEVEL_0
+        bool "-g0 No"
+
+      config COMPILER_DEBUG_LEVEL_1
+        bool "-g1 Min"
+
+      config COMPILER_DEBUG_LEVEL_3
+        bool "-g3 Max"
+    endchoice
+
+    config COMPILER_DEBUG_LEVEL
+      string
+        default "-g" if COMPILER_DEBUG_LEVEL_DEPEND_ON_OS
+        default "-g0" if COMPILER_DEBUG_LEVEL_0
+        default "-g1" if COMPILER_DEBUG_LEVEL_1
+        default "-g3" if COMPILER_DEBUG_LEVEL_3
+    ###########################################################################
+    # COMPILER OPTIMIZATION LEVEL
+    ###########################################################################
+    choice COMPILER_OPTIMIZATION_LEVEL
+      prompt "Optimization Level"
+      default COMPILER_OPTIMIZATION_LEVEL_0
+      help
+        -Og Standard edit-compile-debug cycle
+        -O0 Without optimization
+        -O1 Compiler tries to reduce code size and execution time
+        -O2 Compiler performs nearly all supported optimizations
+        -O3 Turn on all optimizations
+        -Os Optimize for size
+
+      config COMPILER_OPTIMIZATION_LEVEL_G
+        bool "-Og"
+
+      config COMPILER_OPTIMIZATION_LEVEL_0
+        bool "-O0"
+
+      config COMPILER_OPTIMIZATION_LEVEL_1
+        bool "-O1"
+
+      config COMPILER_OPTIMIZATION_LEVEL_2
+        bool "-O2"
+
+      config COMPILER_OPTIMIZATION_LEVEL_3
+        bool "-O3"
+
+      config COMPILER_OPTIMIZATION_LEVEL_S
+        bool "-Os"
+    endchoice
+
+    config COMPILER_OPTIMIZATION_LEVEL
+      string
+        default "-Og" if COMPILER_OPTIMIZATION_LEVEL_G
+        default "-O0" if COMPILER_OPTIMIZATION_LEVEL_0
+        default "-O1" if COMPILER_OPTIMIZATION_LEVEL_1
+        default "-O2" if COMPILER_OPTIMIZATION_LEVEL_2
+        default "-O3" if COMPILER_OPTIMIZATION_LEVEL_3
+        default "-Os" if COMPILER_OPTIMIZATION_LEVEL_S
+    ###########################################################################
+    # COMPILER C LANGUAGE STANDARD
+    ###########################################################################
+    choice COMPILER_C_LANGUAGE_STANDARD
+      prompt "C Language Standard"
+      default STD_GNU11
+
+      config STD_C90
+        bool "c90"
+
+      config STD_GNU90
+        bool "gnu90"
+
+      config STD_C99
+        bool "c99"
+
+      config STD_GNU99
+        bool "gnu99"
+
+      config STD_C11
+        bool "c11"
+
+      config STD_GNU11
+        bool "gnu11"
+    endchoice
+
+    config COMPILER_C_LANGUAGE_STANDARD
+      string
+        default "c90" if STD_C90
+        default "c99" if STD_C99
+        default "c11" if STD_C11
+        default "gnu90" if STD_GNU90
+        default "gnu99" if STD_GNU99
+        default "gnu11" if STD_GNU11
+    ###########################################################################
+    # COMPILER C++ LANGUAGE STANDARD
+    ###########################################################################
+    choice COMPILER_CPP_LANGUAGE_STANDARD
+      prompt "C++ Language Standard"
+      default STD_GNUPP_14
+
+      config STD_CPP_98
+        bool "c++98"
+
+      config STD_GNUPP_98
+        bool "gnu++98"
+
+      config STD_CPP_11
+        bool "c++11"
+
+      config STD_GNUPP_11
+        bool "gnu++11"
+
+      config STD_CPP_14
+        bool "c++14"
+
+      config STD_GNUPP_14
+        bool "gnu++14"
+    endchoice
+
+    config COMPILER_CPP_LANGUAGE_STANDARD
+      string
+        default "c++98" if STD_CPP_98
+        default "c++11" if STD_CPP_11
+        default "c++14" if STD_CPP_14
+        default "gnu++98" if STD_GNUPP_98
+        default "gnu++11" if STD_GNUPP_11
+        default "gnu++14" if STD_GNUPP_14
+    ###########################################################################
+    # COMPILER FLAG FUNCTION SECTIONS
+    ###########################################################################
+    config COMPILER_FLAG_FUNCTION_SECTIONS
+      bool "-ffunction-sections"
+      default y
+      help
+        Place functions in their own sections
+
+    config COMPILER_FUNCTION_SECTIONS
+      string
+        default "-ffunction-sections" if COMPILER_FLAG_FUNCTION_SECTIONS && y
+    ###########################################################################
+    # COMPILER FLAG DATA SECTIONS
+    ###########################################################################
+    config COMPILER_FLAG_DATA_SECTIONS
+      bool "-fdata-sections"
+      default y
+      help
+        Place data in their own sections
+
+    config COMPILER_DATA_SECTIONS
+      string
+        default "-fdata-sections" if COMPILER_FLAG_DATA_SECTIONS && y
+    ###########################################################################
+    # COMPILER FLAG STACK USAGE
+    ###########################################################################
+    config COMPILER_FLAG_STACK_USAGE
+      bool "-fstack-usage"
+      default y
+      help
+        A unit compiled with -fstack-usage will generate an extra file that
+        specifies the maximum amount of stack used, on a per-function basis
+
+    config COMPILER_STACK_USAGE
+      string
+        default "-fstack-usage" if COMPILER_FLAG_STACK_USAGE && y
+    ###########################################################################
+    # COMPILER FLAG WARNING ALL
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_ALL
+      bool "-Wall"
+      default y
+      help
+        This enables all the warnings about constructions that some users consider
+        questionable, and that are easy to avoid (or modify to prevent the warning),
+        even in conjunction with macros
+
+    config COMPILER_WARNING_ALL
+      string
+        default "-Wall" if COMPILER_FLAG_WARNING_ALL && y
+    ###########################################################################
+    # COMPILER FLAG WARNING ERROR
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_ERROR
+      bool "-Werror"
+      default n
+      help
+        Make all warnings into errors
+
+    config COMPILER_WARNING_ERROR
+      string
+        default "-Werror" if COMPILER_FLAG_WARNING_ERROR && y
+    ###########################################################################
+    # COMPILER FLAG WARNING EXTRA
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_EXTRA
+      bool "-Wextra"
+      default y
+      help
+        This enables some extra warning flags that are not enabled by -Wall
+
+    config COMPILER_WARNING_EXTRA
+      string
+        default "-Wextra" if COMPILER_FLAG_WARNING_EXTRA && y
+    ###########################################################################
+    # COMPILER FLAG WARNING NO UNUSED PARAMETER
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_NO_UNUSED_PARAMETER
+      bool "-Wno-unused-parameter"
+      default y
+      help
+        Turn off warn whenever a function parameter is unused aside from its
+        declaration
+
+    config COMPILER_WARNING_NO_UNUSED_PARAMETER
+      string
+        default "-Wno-unused-parameter" if COMPILER_FLAG_WARNING_NO_UNUSED_PARAMETER && y
+    ###########################################################################
+    # COMPILER FLAG WARNING SWITCH DEFAULT
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_SWITCH_DEFAULT
+      bool "-Wswitch-default"
+      default n
+      help
+        Warn whenever a switch statement does not have a default case
+
+    config COMPILER_WARNING_SWITCH_DEFAULT
+      string
+        default "-Wswitch-default" if COMPILER_FLAG_WARNING_SWITCH_DEFAULT && y
+    ###########################################################################
+    # COMPILER FLAG WARNING SWITCH ENUM
+    ###########################################################################
+    config COMPILER_FLAG_WARNING_SWITCH_ENUM
+      bool "-Wswitch-enum"
+      default y
+      help
+        Warn whenever a switch statement has an index of enumerated type and lacks
+        a case for one or more of the named codes of that enumeration
+
+    config COMPILER_WARNING_SWITCH_ENUM
+      string
+        default "-Wswitch-enum" if COMPILER_FLAG_WARNING_SWITCH_ENUM && y
+    ###########################################################################
+    # COMPILER FLAG USE PRINTF FLOAT
+    ###########################################################################
+    config COMPILER_FLAG_USE_PRINTF_FLOAT
+      bool "-u_printf_float"
+      default y
+      help
+        Use float with printf from newlib-nano
+
+    config COMPILER_USE_PRINTF_FLOAT
+      string
+        default "-u_printf_float" if COMPILER_FLAG_USE_PRINTF_FLOAT && y
+    ###########################################################################
+    # COMPILER FLAG USE SCANF FLOAT
+    ###########################################################################
+    config COMPILER_FLAG_USE_SCANF_FLOAT
+      bool "-u_scanf_float"
+      default n
+      help
+        Use float with scanf from newlib-nano
+
+    config COMPILER_USE_SCANF_FLOAT
+      string
+        default "-u_scanf_float" if COMPILER_FLAG_USE_SCANF_FLOAT && y
+    ###########################################################################
+  endmenu
+
+  menu "Components"
+    source "components/freertos/kconfig"
+    source "components/log/kconfig"
+  endmenu
+
+###############################################################################

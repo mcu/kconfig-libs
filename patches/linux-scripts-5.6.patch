@@ -1,0 +1,122 @@
+diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
+index 6cabf20ce..00e1b48a4 100644
+--- a/scripts/Kbuild.include
++++ b/scripts/Kbuild.include
+@@ -224,7 +224,7 @@ if_changed_dep = $(if $(newer-prereqs)$(cmd-check),$(cmd_and_fixdep),@:)
+ 
+ cmd_and_fixdep =                                                             \
+ 	$(cmd);                                                              \
+-	scripts/basic/fixdep $(depfile) $@ '$(make-cmd)' > $(dot-target).cmd;\
++	$(srctree)/scripts/basic/fixdep $(depfile) $@ '$(make-cmd)' > $(dot-target).cmd;\
+ 	rm -f $(depfile)
+ 
+ # Usage: $(call if_changed_rule,foo)
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index a1730d42e..885d50fc5 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -34,20 +34,20 @@ subdir-asflags-y :=
+ subdir-ccflags-y :=
+ 
+ # Read auto.conf if it exists, otherwise ignore
+--include include/config/auto.conf
++-include scripts/include/config/auto.conf
+ 
+-include scripts/Kbuild.include
++include $(srctree)/scripts/Kbuild.include
+ 
+ # The filename Kbuild has precedence over Makefile
+ kbuild-dir := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+ kbuild-file := $(if $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Kbuild,$(kbuild-dir)/Makefile)
+ include $(kbuild-file)
+ 
+-include scripts/Makefile.lib
++include $(srctree)/scripts/Makefile.lib
+ 
+ # Do not include host rules unless needed
+ ifneq ($(hostprogs)$(hostlibs-y)$(hostlibs-m)$(hostcxxlibs-y)$(hostcxxlibs-m),)
+-include scripts/Makefile.host
++include $(srctree)/scripts/Makefile.host
+ endif
+ 
+ ifndef obj
+@@ -230,8 +230,8 @@ endif # CONFIG_STACK_VALIDATION
+ 
+ # Rebuild all objects when objtool changes, or is enabled/disabled.
+ objtool_dep = $(objtool_obj)					\
+-	      $(wildcard include/config/orc/unwinder.h		\
+-			 include/config/stack/validation.h)
++	      $(wildcard scripts/include/config/orc/unwinder.h		\
++			 scripts/include/config/stack/validation.h)
+ 
+ ifdef CONFIG_TRIM_UNUSED_KSYMS
+ cmd_gen_ksymdeps = \
+diff --git a/scripts/basic/.gitignore b/scripts/basic/.gitignore
+index a776371a3..4efedb212 100644
+--- a/scripts/basic/.gitignore
++++ b/scripts/basic/.gitignore
+@@ -1 +1,2 @@
+ fixdep
++*.cmd
+diff --git a/scripts/basic/fixdep.c b/scripts/basic/fixdep.c
+index 9ba47b0a4..a2263e0c0 100644
+--- a/scripts/basic/fixdep.c
++++ b/scripts/basic/fixdep.c
+@@ -225,7 +225,7 @@ static void use_config(const char *m, int slen)
+ 	    return;
+ 
+ 	define_config(m, slen, hash);
+-	print_dep(m, slen, "include/config");
++	print_dep(m, slen, "scripts/include/config");
+ }
+ 
+ /* test if s ends in sub */
+@@ -298,8 +298,8 @@ static void *read_file(const char *filename)
+ /* Ignore certain dependencies */
+ static int is_ignored_file(const char *s, int len)
+ {
+-	return str_ends_with(s, len, "include/generated/autoconf.h") ||
+-	       str_ends_with(s, len, "include/generated/autoksyms.h") ||
++	return str_ends_with(s, len, "scripts/include/generated/autoconf.h") ||
++	       str_ends_with(s, len, "scripts/include/generated/autoksyms.h") ||
+ 	       str_ends_with(s, len, ".ver");
+ }
+ 
+diff --git a/scripts/kconfig/.gitignore b/scripts/kconfig/.gitignore
+index b5bf92f66..8d985cb7e 100644
+--- a/scripts/kconfig/.gitignore
++++ b/scripts/kconfig/.gitignore
+@@ -3,6 +3,11 @@
+ #
+ *.moc
+ *conf-cfg
++*.o
++*.cmd
++*.tmp
++lexer.lex.c
++parser.tab.*
+ 
+ #
+ # configuration programs
+diff --git a/scripts/kconfig/confdata.c b/scripts/kconfig/confdata.c
+index a39d93e3c..f45e7ff95 100644
+--- a/scripts/kconfig/confdata.c
++++ b/scripts/kconfig/confdata.c
+@@ -972,7 +972,7 @@ static int conf_touch_deps(void)
+ 	struct symbol *sym;
+ 	int res, i;
+ 
+-	strcpy(depfile_path, "include/config/");
++	strcpy(depfile_path, "scripts/include/config/");
+ 	depfile_prefix_len = strlen(depfile_path);
+ 
+ 	name = conf_get_autoconfig_name();
+@@ -1049,7 +1049,7 @@ int conf_write_autoconf(int overwrite)
+ 	if (!overwrite && is_present(autoconf_name))
+ 		return 0;
+ 
+-	conf_write_dep("include/config/auto.conf.cmd");
++	conf_write_dep("scripts/include/config/auto.conf.cmd");
+ 
+ 	if (conf_touch_deps())
+ 		return 1;

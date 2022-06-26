@@ -1,0 +1,9 @@
+syntax = "proto2";
+package pb;
+message msg {
+  required uint32 msg_id = 0xf5;
+  required uint32 cmd_id = 0x2d;
+  optional uint32 err_id = 0xb4;
+  optional string string = 0xa1;
+  optional float number = 0xc9;
+}
