@@ -1,6 +1,6 @@
 # kconfig-libs
 
-Build components into libraries like the early ESP-IDF but with a single makefile
+Build components into libraries like the early ESP-IDF but with a single makefile.
 Kconfig updated to linux version 5.6.
 
 ## Get project and build
@@ -14,8 +14,7 @@ Kconfig updated to linux version 5.6.
 
 ## Problems to be solved
 
-Get rid of the need to use goal 'all'. It is necessary to ensure the possibility
-of using the dependency of one component on another.
+It is necessary to ensure the possibility of using the dependency of one component on another.
 
 ## Comment
 
