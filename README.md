@@ -21,4 +21,3 @@ of using the dependency of one component on another.
 
 The project provided as is for those who can understand and continue development.
 As you explore, you will discover interesting solutions.
->>>>>>> fd67fec (Add project)
